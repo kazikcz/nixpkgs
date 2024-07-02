@@ -26,6 +26,7 @@ in stdenv.mkDerivation (rec {
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+    patchShebangs src
   '';
 
   configureFlags = [
@@ -42,6 +43,10 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ gettext ];
 
   postConfigure =
+    ''
+    patchShebangs src
+    ''
+    +
     # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
     # `config.status' run:
     #   ./config.status[1401]: shift: (null): bad number
